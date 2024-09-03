@@ -5,6 +5,7 @@ import CardTemas from '../cardTemas/CardTemas';
 import AuthContext from '../../../contexts/AuthContex';
 import { buscar } from '../../../service/Service';
 import { DNA } from 'react-loader-spinner';
+import { ToastAlerta } from '../../../utils/ToastAlerta';
 
 function ListaTemas() {
   const [temas, setTemas] = useState<Tema[]>([]);
@@ -20,8 +21,8 @@ function ListaTemas() {
         headers: { Authorization: token },
       });
     } catch (error: any) {
-      if (error.toString().includes('403')) {
-        alert('O token expirou, favor logar novamente')
+      if (error.toString().includes('401')) {
+        ToastAlerta('O token expirou, favor logar novamente', 'info')
         handleLogout()
       }
     }
@@ -29,7 +30,7 @@ function ListaTemas() {
 
   useEffect(() => {
     if (token === '') {
-      alert('Você precisa estar logado');
+      ToastAlerta('Você precisa estar logado' , 'info');
       navigate('/login');
     }
   }, [token]);
